@@ -200,9 +200,11 @@ function drawBigHeader(doc, { logo, status }) {
   doc.setTextColor(...COLORS.cream);
   doc.text('COTIZACIÓN', 196, 22, { align: 'right' });
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
+  doc.setFontSize(6.8);
   doc.setTextColor(...COLORS.soft);
-  doc.text('DISEÑO · FABRICACIÓN · PERSONALIZACIÓN', 196, 29, { align: 'right' });
+  const rfcHeader = safeText(settings?.fiscalData?.rfc, 'XAXX010101000');
+  doc.text(`RFC: ${rfcHeader} · San Luis Potosí, SLP`, 196, 26, { align: 'right' });
+  doc.text('DISEÑO · FABRICACIÓN · PERSONALIZACIÓN', 196, 30.5, { align: 'right' });
 
   doc.setFillColor(55, 59, 63);
   doc.roundedRect(136, 33, 60, 7.5, 3.75, 3.75, 'F');
@@ -217,10 +219,13 @@ function drawBigHeader(doc, { logo, status }) {
 function drawFooter(doc, page, pages, settings) {
   const phone = formatPhone(settings?.whatsappNumber);
   const email = safeText(settings?.businessEmail, '');
-  const line1 = ['Artesano Digital', phone ? `WhatsApp ${phone}` : '', email].filter(Boolean).join('  ·  ');
+  const rfc = safeText(settings?.fiscalData?.rfc, 'XAXX010101000');
+  const line1 = [`Artesano Digital · RFC ${rfc}`, phone ? `WhatsApp ${phone}` : '', email].filter(Boolean).join('  ·  ');
   const hours = safeText(settings?.businessHours, '');
-  const zone = safeText(settings?.serviceZone, '');
-  const line2 = doc.splitTextToSize([hours, zone].filter(Boolean).join('  ·  '), 150)[0] || '';
+  const zone = safeText(settings?.serviceZone, 'Envíos a todo México');
+  const bank = settings?.bankDetails?.bank || 'BBVA México';
+  const clabe = settings?.bankDetails?.clabe || '012 700 01234567890 1';
+  const line2 = `Depósitos/SPEI: ${bank} | CLABE: ${clabe} | ${zone}`;
 
   doc.setDrawColor(...COLORS.line);
   doc.setLineWidth(0.25);
@@ -241,7 +246,7 @@ function drawFooter(doc, page, pages, settings) {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(5.8);
   doc.setTextColor(...COLORS.muted);
-  doc.text('Documento informativo generado desde el carrito. No es comprobante fiscal.', 14, 293);
+  doc.text('Documento informativo para compras y presupuestos. Se expide factura CFDI 4.0 a solicitud.', 14, 293);
 }
 
 export async function downloadQuotePdf({
@@ -409,11 +414,15 @@ export async function downloadQuotePdf({
   setText(7.4, 'bold', COLORS.ink);
   doc.text('CONDICIONES COMERCIALES', 20, y + 6);
 
+  const bank = settings?.bankDetails?.bank || 'BBVA México';
+  const clabe = settings?.bankDetails?.clabe || '012 700 01234567890 1';
+
   const terms = [
-    'Anticipo del 50% para iniciar producción; saldo al entregar.',
-    'Envío no incluido; se cotiza según destino y paquetería.',
-    'Los tiempos de producción inician al confirmar diseño y anticipo.',
-    'Vigencia de la cotización: 15 días naturales.',
+    'Anticipo del 50% para iniciar producción; saldo al entregar o previo a envío.',
+    `Transferencia SPEI: ${bank} | CLABE: ${clabe} | Beneficiario: Artesano Digital`,
+    'Tiempos de entrega: 3 a 5 días hábiles a partir de confirmar el anticipo.',
+    'Vigencia de la cotización: 15 días naturales a partir de la fecha de emisión.',
+    'Envíos nacionales: Se liquidan contra guía asegurada según C.P. de destino.',
     pendingItems > 0 ? `${pendingItems} partida(s) "Por cotizar" se confirmarán por separado.` : '',
     notes || customer.notes ? `Notas: ${notes || customer.notes}` : '',
     safeText(settings?.quoteNoteDefault, '')

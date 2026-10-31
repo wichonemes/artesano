@@ -887,6 +887,70 @@ export default function ProductDetailModal({
                 </div>
               </div>
 
+              {/* Tabla de Mayoreo y Volumen Corporativo para Empresas y Eventos */}
+              {effectivePrice > 0 && !product.isBundle && product.code !== 'EV-PATCHBAR' && (
+                <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200/90 shadow-2xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-stone-600 mb-2">
+                    <span className="flex items-center gap-1 font-black text-gray-800">
+                      <Package className="w-3.5 h-3.5 text-emerald-700" />
+                      Precios por Volumen / Mayoreo Corporativo
+                    </span>
+                    <span className="text-[9px] text-emerald-800 font-extrabold bg-emerald-100 px-2 py-0.5 rounded-full">
+                      Descuento automático en carrito
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(Math.max(quantity, 12))}
+                      className={`p-2 rounded-xl border transition-all text-xs cursor-pointer ${
+                        quantity >= 12 && quantity < 25
+                          ? 'bg-emerald-50 border-emerald-500 font-black text-emerald-900 ring-2 ring-emerald-500/20 shadow-xs'
+                          : 'bg-white border-stone-200 hover:border-emerald-300 text-stone-700'
+                      }`}
+                      title="Haz clic para seleccionar 12 piezas"
+                    >
+                      <div className="text-[9px] uppercase font-bold text-stone-500">12 a 24 pzas</div>
+                      <div className="text-sm font-black text-[#2D4F3E] mt-0.5">${Math.round(effectivePrice * 0.95)} <span className="text-[9px] font-normal text-stone-500">c/u</span></div>
+                      <div className="text-[9px] font-black text-emerald-700 bg-emerald-50 rounded mt-0.5 py-0.2">5% OFF</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(Math.max(quantity, 25))}
+                      className={`p-2 rounded-xl border transition-all text-xs cursor-pointer ${
+                        quantity >= 25 && quantity < 50
+                          ? 'bg-emerald-50 border-emerald-500 font-black text-emerald-900 ring-2 ring-emerald-500/20 shadow-xs'
+                          : 'bg-white border-stone-200 hover:border-emerald-300 text-stone-700'
+                      }`}
+                      title="Haz clic para seleccionar 25 piezas"
+                    >
+                      <div className="text-[9px] uppercase font-bold text-stone-500">25 a 49 pzas</div>
+                      <div className="text-sm font-black text-[#2D4F3E] mt-0.5">${Math.round(effectivePrice * 0.90)} <span className="text-[9px] font-normal text-stone-500">c/u</span></div>
+                      <div className="text-[9px] font-black text-emerald-700 bg-emerald-50 rounded mt-0.5 py-0.2">10% OFF</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(Math.max(quantity, 50))}
+                      className={`p-2 rounded-xl border transition-all text-xs cursor-pointer ${
+                        quantity >= 50
+                          ? 'bg-emerald-50 border-emerald-500 font-black text-emerald-900 ring-2 ring-emerald-500/20 shadow-xs'
+                          : 'bg-white border-stone-200 hover:border-emerald-300 text-stone-700'
+                      }`}
+                      title="Haz clic para seleccionar 50 piezas"
+                    >
+                      <div className="text-[9px] uppercase font-bold text-stone-500">50+ pzas</div>
+                      <div className="text-sm font-black text-[#2D4F3E] mt-0.5">${Math.round(effectivePrice * 0.85)} <span className="text-[9px] font-normal text-stone-500">c/u</span></div>
+                      <div className="text-[9px] font-black text-emerald-700 bg-emerald-50 rounded mt-0.5 py-0.2">15% OFF</div>
+                    </button>
+                  </div>
+                  <div className="text-[9.5px] text-stone-500 text-center mt-1.5 font-medium">
+                    * Ideal para recuerdos, eventos y regalos empresariales. Puedes hacer clic en cada nivel para aplicar la cantidad.
+                  </div>
+                </div>
+              )}
+
               {/* Despliegue de los 3 Paquetes / Niveles de Taller en Ventana Emergente */}
               {bundleTiers.length > 0 ? (
                 <div className="p-4 rounded-2xl bg-gradient-to-b from-[#FAF8F4] to-[#F5ECE0] border-2 border-[#D4A359]/70 shadow-sm space-y-3.5">
