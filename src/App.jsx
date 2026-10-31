@@ -257,6 +257,15 @@ export default function App() {
     if (urlParams.get('admin') === '1') {
       setIsAdminOpen(true);
     }
+
+    // Atajo discreto para computadora: Ctrl + Shift + A o Alt + A
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) || (e.altKey && (e.key === 'A' || e.key === 'a'))) {
+        e.preventDefault();
+        setIsAdminOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
     if (urlParams.get('privacidad') === '1' || urlParams.get('legal') === '1') {
       setLegalModalState({ isOpen: true, tab: 'privacy' });
     }
